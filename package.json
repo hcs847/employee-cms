@@ -1,0 +1,30 @@
+{
+  "name": "employee-cms",
+  "version": "1.0.0",
+  "description": "A command-line application for employee content management system using Node.js, Inquirer and MySQL.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hcs847/employee-cms.git"
+  },
+  "keywords": [
+    "Node.js",
+    "MySQL",
+    "Inquirer",
+    "CMS"
+  ],
+  "author": "Hila Caspi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hcs847/employee-cms/issues"
+  },
+  "homepage": "https://github.com/hcs847/employee-cms#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "dotenv": "^8.2.0",
+    "inquirer": "^7.3.3"
+  }
+}
