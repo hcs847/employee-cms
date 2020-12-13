@@ -1,36 +1,36 @@
-INSERT INTO department
-    (name)
+INSERT INTO department (name)
 VALUES
-    ('Engineering'),
-    ('Finance'),
-    ('Legal'),
-    ('Sales'),
-    ('Product'),
-    ('CEO');
+('CEO'),
+('Sales'),
+('Legal'),
+('Product'),
+('Finance'),
+('Engineering');
 
 INSERT INTO role (title, salary, department_id)
 VALUES
-('Sales Lead', 10000, 4),
-('Engineering Manager', 20000, 1),
-('Lawyer', 12000, 3),
-('Accountant', 9000, 2),
-('Controller', 18000, 2),
-('Director of Sales', 19000, 4),
-('VP of Product', 30000, 5),
-('General Counsel', 30000, 3),
-('CEO', 100000, 6);
+('CEO', 1000000, 1),
+('VP of Product', 300000, 4),
+('General Counsel', 250000, 3),
+('Engineering Manager', 180000, 6),
+('Director of Sales', 160000, 2),
+('Controller', 180000, 5),
+('Engineer', 150000, 6),
+('Lawyer', 120000, 3),
+('Sales Lead', 100000, 2),
+('Accountant', 90000, 5);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-('Sam', 'Maddison', 9,NULL),
-('Tom', 'Young', 7, 1),
-('David', 'Jackson', 2, 2),
-('Ruth', 'Maywood', 3, 2),
+('Sam', 'Maddison', 1,NULL),
+('Tom', 'Young', 2, 1),
+('Ruth', 'Maywood', 3, 1),
+('David', 'Jackson', 4, 1),
 ('Jane', 'Smith', 5, 2),
-('Jack', 'Davidson', 4, 5),
-('James', "Cheng", 6, 2),
-('Mike', 'Dawn', 8, 1),
-('John', 'Doe', 1, 7);
-
+('Jack', 'Davidson', 6, 1),
+('Hima', 'Krishna', 7, 4),
+('James', "Cheng", 8, 3),
+('Mike', 'Dawn', 9, 5),
+('John', 'Doe', 10, 6);
 
     

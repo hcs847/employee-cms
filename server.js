@@ -7,10 +7,12 @@ const {
   sqlAddEmp,
   sqlAddDep,
   sqlAddRole,
-  sqlRemoveRow,
+  sqlSelectEmp,
+  sqlUpdateEmpRole,
+  sqlRemoveEmp,
 } = require("./db/queries");
 const DisplayResults = require("./lib/DiaplayResults");
-const { addRowData, addEmpData, addDepData, addRoleData } = require("./lib/ExtractResults");
+const { addEmpData, addDepData, addRoleData, removeEmployeeData } = require("./lib/ExtractResults");
 
 const choices = [
   "View All Departments",
@@ -69,7 +71,7 @@ const employeeQuestions = [
   },
 ];
 
-// add department promps
+// department promps
 const addDepQuestion = [
   {
     type: "input",
@@ -78,6 +80,7 @@ const addDepQuestion = [
   },
 ];
 
+// add role
 const addRoleQuestions = [
   {
     type: "input",
@@ -105,46 +108,93 @@ const addRoleQuestions = [
   },
 ];
 
+// update an employee
+const updateEmplQuestions = [
+  {
+    type: "checkbox",
+    name: "fullName",
+    message: "Which employee do you whish to update?",
+    choices: async function updateEmployee() {
+      const result = await pool.query(sqlSelectEmp);
+      const empToDelete = await result.map((emp) => emp.fullName);
+      return empToDelete;
+    },
+  },
+  employeeQuestions[2],
+];
+// remove employee
+const reomveEmplQuestions = [
+  {
+    type: "checkbox",
+    name: "removeEmpId",
+    message: "Which employee do you whish to remove?",
+    choices: async function delEmployee() {
+      const result = await pool.query(sqlSelectEmp);
+      const empToDelete = await result.map((emp) => emp.fullName);
+      return empToDelete;
+    },
+  },
+];
+
 getData = (selectedOption, choices) => {
   switch (selectedOption) {
+    // view departments
     case choices[0]:
       const departments = new DisplayResults(sqlDep, pool, init);
       departments.viewResults();
       break;
 
+    // view roles
     case choices[1]:
-      // viewRoles();
       const roles = new DisplayResults(sqlRole, pool, init);
       roles.viewResults();
       break;
 
+    // view employees
     case choices[2]:
       const employees = new DisplayResults(sqlEmployees, pool, init);
       employees.viewResults();
       break;
-
+    // add a department
     case choices[3]:
-      // addDepartment();
       const department = new addDepData(sqlAddDep, pool, init, promptUser, addDepQuestion);
       department.updateDepartment();
       break;
+
+    // add a role
     case choices[4]:
-      // addRole();
       const role = new addRoleData(sqlAddRole, pool, init, promptUser, addRoleQuestions);
       role.updateRole();
       break;
 
+    // add an employee
     case choices[5]:
       const addEmployeeData = new addEmpData(sqlAddEmp, pool, init, promptUser, employeeQuestions);
       addEmployeeData.updateEmployee();
       break;
 
+    // update an employee role
     case choices[6]:
-      //updateEmployeeRole();
+      const updateEmpRole = new addEmpData(
+        sqlUpdateEmpRole,
+        pool,
+        init,
+        promptUser,
+        updateEmplQuestions
+      );
+      updateEmpRole.updateEmpRole();
       break;
 
+    // remove an employee
     case choices[7]:
-      //removeEmployee();
+      const removeEmpData = new removeEmployeeData(
+        sqlRemoveEmp,
+        pool,
+        init,
+        promptUser,
+        reomveEmplQuestions
+      );
+      removeEmpData.updateEmp();
       break;
 
     case choices[8]:
@@ -173,13 +223,3 @@ console.log(`
   ==============================================
   `);
 init();
-
-async function getDeps() {
-  try {
-    const result = await pool.query(`SELECT name FROM department`);
-    const deps = await result.map((dep) => dep.name);
-    console.log(deps);
-  } catch (err) {
-    console.log(err);
-  }
-}
