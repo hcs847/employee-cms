@@ -5,7 +5,8 @@ VALUES
     ('Finance'),
     ('Legal'),
     ('Sales'),
-    ('Operations');
+    ('Product'),
+    ('CEO');
 
 INSERT INTO role (title, salary, department_id)
 VALUES
@@ -15,16 +16,21 @@ VALUES
 ('Accountant', 9000, 2),
 ('Controller', 18000, 2),
 ('Director of Sales', 19000, 4),
-('VP of Operations', 30000, 5);
+('VP of Product', 30000, 5),
+('General Counsel', 30000, 3),
+('CEO', 100000, 6);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-('Tom', 'Young', 7, NULL),
-('David', 'Jackson', 2, 1),
-('Ruth', 'Maywood', 3, 1),
-('Jane', 'Smith', 5, 1),
-('Jack', 'Davidson', 4, 4),
-('James', "Cheng", 6, 1),
-('John', 'Doe', 1, 6);
+('Sam', 'Maddison', 9,NULL),
+('Tom', 'Young', 7, 1),
+('David', 'Jackson', 2, 2),
+('Ruth', 'Maywood', 3, 2),
+('Jane', 'Smith', 5, 2),
+('Jack', 'Davidson', 4, 5),
+('James', "Cheng", 6, 2),
+('Mike', 'Dawn', 8, 1),
+('John', 'Doe', 1, 7);
+
 
     
