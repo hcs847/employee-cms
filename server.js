@@ -60,10 +60,8 @@ const employeeQuestions = [
     name: "manager",
     message: "Who is the employee Manager?",
     choices: async function getManager() {
-      const result = await pool.query(`SELECT CONCAT(e2.first_name,' ', e2.last_name) AS manager  
-      FROM employee AS e1
-      INNER JOIN employee as e2 ON e1.manager_id = e2.id
-      GROUP BY e1.manager_id;
+      const result = await pool.query(`SELECT CONCAT(first_name,' ', last_name) AS manager  
+      FROM employee;
       `);
       const managers = await result.map((manager) => manager.manager);
       return managers;
