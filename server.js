@@ -1,5 +1,6 @@
 const pool = require("./db/database");
 const inquirer = require("inquirer");
+const { choices, questions } = require("./lib/inquirerQuestions");
 const {
   sqlDep,
   sqlEmployees,
@@ -7,7 +8,6 @@ const {
   sqlAddEmp,
   sqlAddDep,
   sqlAddRole,
-  sqlSelectEmp,
   sqlUpdateEmpRole,
   sqlRemoveEmp,
 } = require("./db/queries");
@@ -20,126 +20,6 @@ const {
   updateEmpData,
   removeEmployeeData,
 } = require("./lib/ExtractResults");
-
-const choices = [
-  "View All Departments",
-  "View All Roles",
-  "View All Employees",
-  "Add A Department",
-  "Add A Role",
-  "Add An Employee",
-  "Update An Employee Role",
-  "Remove an employee",
-  "Exit The Application",
-];
-const initialQuestions = [
-  {
-    type: "checkbox",
-    name: "initial",
-    message: "What would you like to do?",
-    choices: choices,
-  },
-];
-
-const employeeQuestions = [
-  {
-    type: "input",
-    name: "firstName",
-    message: "What is the employee’s First name?",
-  },
-  {
-    type: "input",
-    name: "lastName",
-    message: "What is the employee’s Last name?",
-  },
-  {
-    type: "checkbox",
-    name: "title",
-    message: "What is the employee’s Role?",
-    choices: async function getRoles() {
-      const result = await pool.query(`SELECT title FROM role`);
-      const roles = await result.map((role) => role.title);
-      return roles;
-    },
-  },
-  {
-    type: "checkbox",
-    name: "manager",
-    message: "Who is the employee Manager?",
-    choices: async function getManager() {
-      const result = await pool.query(`SELECT CONCAT(first_name,' ', last_name) AS manager  
-      FROM employee;
-      `);
-      const managers = await result.map((manager) => manager.manager);
-      return managers;
-    },
-  },
-];
-
-// department promps
-const addDepQuestion = [
-  {
-    type: "input",
-    name: "department",
-    message: "What is the new Department?",
-  },
-];
-
-// add role
-const addRoleQuestions = [
-  {
-    type: "input",
-    name: "title",
-    message: "What is the role's title?",
-  },
-  {
-    type: "input",
-    name: "salary",
-    message: "What is the role's salary?",
-  },
-  {
-    type: "checkbox",
-    name: "departmentName",
-    message: "Which department does the role belongs to?",
-    choices: async function getDeps() {
-      try {
-        const result = await pool.query(sqlDep);
-        const deps = await result.map((dep) => dep.name);
-        return deps;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-  },
-];
-
-// update an employee
-const updateEmplQuestions = [
-  {
-    type: "checkbox",
-    name: "fullName",
-    message: "Which employee do you whish to update?",
-    choices: async function updateEmployee() {
-      const result = await pool.query(sqlSelectEmp);
-      const empToDelete = await result.map((emp) => emp.fullName);
-      return empToDelete;
-    },
-  },
-  employeeQuestions[2],
-];
-// remove employee
-const reomveEmplQuestions = [
-  {
-    type: "checkbox",
-    name: "removeEmpName",
-    message: "Which employee do you whish to remove?",
-    choices: async function delEmployee() {
-      const result = await pool.query(sqlSelectEmp);
-      const empToDelete = await result.map((emp) => emp.fullName);
-      return empToDelete;
-    },
-  },
-];
 
 getData = (selectedOption, choices) => {
   switch (selectedOption) {
@@ -168,14 +48,14 @@ getData = (selectedOption, choices) => {
         pool,
         init,
         promptUser,
-        addDepQuestion
+        questions.addDep
       );
       department.updateDataDb();
       break;
 
     // add a role
     case choices[4]:
-      const role = new addRoleData("role", sqlAddRole, pool, init, promptUser, addRoleQuestions);
+      const role = new addRoleData("role", sqlAddRole, pool, init, promptUser, questions.addRole);
       role.updateDataDb();
       break;
 
@@ -187,7 +67,7 @@ getData = (selectedOption, choices) => {
         pool,
         init,
         promptUser,
-        employeeQuestions
+        questions.newEmp
       );
       addEmployeeData.updateDataDb();
       break;
@@ -200,7 +80,7 @@ getData = (selectedOption, choices) => {
         pool,
         init,
         promptUser,
-        updateEmplQuestions
+        questions.updateEmp
       );
       updateEmpRole.updateDataDb();
       break;
@@ -213,7 +93,7 @@ getData = (selectedOption, choices) => {
         pool,
         init,
         promptUser,
-        reomveEmplQuestions
+        questions.removeEmp
       );
       removeEmpData.removeDataDb();
       break;
@@ -231,7 +111,7 @@ const promptUser = (questions) => {
 async function init() {
   console.log(" ");
   try {
-    const userAnswers = await promptUser(initialQuestions);
+    const userAnswers = await promptUser(questions.initial);
     await getData(...userAnswers.initial, choices);
   } catch (err) {
     console.log(err);
