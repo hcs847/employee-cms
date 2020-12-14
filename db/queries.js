@@ -1,7 +1,7 @@
 // const pool = require("./database");
 
 const sqlDep = `SELECT id, name from department;`;
-const sqlRole = `SELECT title AS job_title, role.id AS role_id, name AS department_name, salary  from role
+const sqlRole = `SELECT title AS job_title, role.id AS role_id, name AS department_name, salary from role
                     LEFT JOIN department ON role.department_id = department.id
                     ORDER BY job_title DESC;`;
 const sqlEmployees = `SELECT e1.id , e1.first_name, e1.last_name, role.title AS job_title, 
@@ -24,7 +24,8 @@ ORDER BY fullName;
 `;
 const sqlRemoveEmp = `DELETE FROM employee WHERE id = ?`;
 const sqlUpdateEmpRole = "UPDATE employee SET role_id = ? WHERE id = ?";
-
+const sqlFullName = `SELECT id FROM employee WHERE CONCAT(first_name,' ', last_name) = ?`;
+const sqlIdToDelete = `SELECT id FROM employee WHERE CONCAT(first_name,' ', last_name) = ?`;
 // update role
 
 // remove employee
@@ -39,4 +40,6 @@ module.exports = {
   sqlSelectEmp,
   sqlAddDep,
   sqlUpdateEmpRole,
+  sqlFullName,
+  sqlIdToDelete,
 };

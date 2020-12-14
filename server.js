@@ -11,8 +11,15 @@ const {
   sqlUpdateEmpRole,
   sqlRemoveEmp,
 } = require("./db/queries");
+
 const DisplayResults = require("./lib/DiaplayResults");
-const { addEmpData, addDepData, addRoleData, removeEmployeeData } = require("./lib/ExtractResults");
+const {
+  addEmpData,
+  addDepData,
+  addRoleData,
+  updateEmpData,
+  removeEmployeeData,
+} = require("./lib/ExtractResults");
 
 const choices = [
   "View All Departments",
@@ -96,7 +103,7 @@ const addRoleQuestions = [
     message: "Which department does the role belongs to?",
     choices: async function getDeps() {
       try {
-        const result = await pool.query(`SELECT name FROM department`);
+        const result = await pool.query(sqlDep);
         const deps = await result.map((dep) => dep.name);
         return deps;
       } catch (err) {
@@ -124,7 +131,7 @@ const updateEmplQuestions = [
 const reomveEmplQuestions = [
   {
     type: "checkbox",
-    name: "removeEmpId",
+    name: "removeEmpName",
     message: "Which employee do you whish to remove?",
     choices: async function delEmployee() {
       const result = await pool.query(sqlSelectEmp);
@@ -155,44 +162,60 @@ getData = (selectedOption, choices) => {
       break;
     // add a department
     case choices[3]:
-      const department = new addDepData(sqlAddDep, pool, init, promptUser, addDepQuestion);
-      department.updateDepartment();
+      const department = new addDepData(
+        "department",
+        sqlAddDep,
+        pool,
+        init,
+        promptUser,
+        addDepQuestion
+      );
+      department.updateDataDb();
       break;
 
     // add a role
     case choices[4]:
-      const role = new addRoleData(sqlAddRole, pool, init, promptUser, addRoleQuestions);
-      role.updateRole();
+      const role = new addRoleData("role", sqlAddRole, pool, init, promptUser, addRoleQuestions);
+      role.updateDataDb();
       break;
 
     // add an employee
     case choices[5]:
-      const addEmployeeData = new addEmpData(sqlAddEmp, pool, init, promptUser, employeeQuestions);
-      addEmployeeData.updateEmployee();
+      const addEmployeeData = new addEmpData(
+        "employee",
+        sqlAddEmp,
+        pool,
+        init,
+        promptUser,
+        employeeQuestions
+      );
+      addEmployeeData.updateDataDb();
       break;
 
     // update an employee role
     case choices[6]:
-      const updateEmpRole = new addEmpData(
+      const updateEmpRole = new updateEmpData(
+        "employee",
         sqlUpdateEmpRole,
         pool,
         init,
         promptUser,
         updateEmplQuestions
       );
-      updateEmpRole.updateEmpRole();
+      updateEmpRole.updateDataDb();
       break;
 
     // remove an employee
     case choices[7]:
       const removeEmpData = new removeEmployeeData(
+        "employee",
         sqlRemoveEmp,
         pool,
         init,
         promptUser,
         reomveEmplQuestions
       );
-      removeEmpData.updateEmp();
+      removeEmpData.removeDataDb();
       break;
 
     case choices[8]:
