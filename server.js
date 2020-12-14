@@ -12,37 +12,37 @@ const {
   sqlRemoveEmp,
 } = require("./db/queries");
 
-const DisplayResults = require("./lib/DiaplayResults");
+const SelectReports = require("./lib/SelectReports");
 const {
-  addEmpData,
-  addDepData,
-  addRoleData,
-  updateEmpData,
-  removeEmployeeData,
-} = require("./lib/ExtractResults");
+  AddEmpData,
+  AddDepData,
+  AddRoleData,
+  UpdateEmpData,
+  RemoveEmpData,
+} = require("./lib/DatabaseHelper");
 
 getData = (selectedOption, choices) => {
   switch (selectedOption) {
     // view departments
     case choices[0]:
-      const departments = new DisplayResults(sqlDep, pool, init);
+      const departments = new SelectReports(sqlDep, pool, init);
       departments.viewResults();
       break;
 
     // view roles
     case choices[1]:
-      const roles = new DisplayResults(sqlRole, pool, init);
+      const roles = new SelectReports(sqlRole, pool, init);
       roles.viewResults();
       break;
 
     // view employees
     case choices[2]:
-      const employees = new DisplayResults(sqlEmployees, pool, init);
+      const employees = new SelectReports(sqlEmployees, pool, init);
       employees.viewResults();
       break;
     // add a department
     case choices[3]:
-      const department = new addDepData(
+      const department = new AddDepData(
         "department",
         sqlAddDep,
         pool,
@@ -55,13 +55,13 @@ getData = (selectedOption, choices) => {
 
     // add a role
     case choices[4]:
-      const role = new addRoleData("role", sqlAddRole, pool, init, promptUser, questions.addRole);
+      const role = new AddRoleData("role", sqlAddRole, pool, init, promptUser, questions.addRole);
       role.updateDataDb();
       break;
 
     // add an employee
     case choices[5]:
-      const addEmployeeData = new addEmpData(
+      const addEmployeeData = new AddEmpData(
         "employee",
         sqlAddEmp,
         pool,
@@ -74,7 +74,7 @@ getData = (selectedOption, choices) => {
 
     // update an employee role
     case choices[6]:
-      const updateEmpRole = new updateEmpData(
+      const updateEmpRole = new UpdateEmpData(
         "employee",
         sqlUpdateEmpRole,
         pool,
@@ -87,7 +87,7 @@ getData = (selectedOption, choices) => {
 
     // remove an employee
     case choices[7]:
-      const removeEmpData = new removeEmployeeData(
+      const removeEmpData = new RemoveEmpData(
         "employee",
         sqlRemoveEmp,
         pool,
